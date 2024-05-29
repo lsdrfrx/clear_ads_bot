@@ -1,9 +1,12 @@
 import asyncio
+import os
+import sys
 
 from aiogram import Bot, Dispatcher, F, Router
 from aiogram.types import Message
+from dotenv import load_dotenv
 
-import config
+load_dotenv()
 
 router = Router()
 
@@ -19,7 +22,12 @@ async def handle_message(message: Message):
 
 
 async def main():
-    bot = Bot(token=config.TOKEN, parse_mode="html")
+    TOKEN = os.getenv("TOKEN", "")
+    if not TOKEN:
+        print("Failed to read token")
+        sys.exit()
+
+    bot = Bot(token=TOKEN, parse_mode="html")
     dp = Dispatcher()
     dp.include_router(router)
 
